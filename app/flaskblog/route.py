@@ -1,8 +1,8 @@
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db
 from flaskblog.forms import RegistrationForm, LoginForm
 from flaskblog.models import User
-from flask_login import login_user
+from flask_login import login_user, current_user, logout_user, login_required
 import os
 
 image_folder = os.path.join('static', 'Images')
@@ -40,6 +40,8 @@ def about():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'logo1.jpg')
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         #hash_pswd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -59,11 +61,22 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and form.password == user.password:
             login_user(user, remember=form.remember.data)
-            return redirect(url_for('home'))
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
             flash('You have been logged in!', 'success')
             
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form, logo = full_filename)
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+@app.route("/account")
+@login_required
+def account():
+    return render_template('account.html', title='Suggestions')
 
 
