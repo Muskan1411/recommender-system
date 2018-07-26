@@ -1,14 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for post in posts %}
+    {% for place in places %}
         <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
+          <div class="media">
+            <img class="rounded-circle account-img" src="{{ image }}">
+            <div class="media-body">
+              <h2 class="account-heading">{{ place.name }}</h2>
+              <h4 class="text-secondary">{{ place.city }}</h4>
+              <div class="article-metadata">
+                <small class="text-muted">{{ place.features }}</small>
+              </div>
+              <h2><a class="article-title" href="#">{{ place.name }}</a></h2>
+              <p class="article-content">{{ post.desc }}</p>
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
           </div>
         </article>
     {% endfor %}

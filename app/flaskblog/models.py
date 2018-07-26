@@ -14,3 +14,16 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
+
+class Admin(db.Model):
+	username = db.Column("Admin11")
+	password = db.Column("muskan")
+
+
+class AddPlaces(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	cityName = db.Column(db.String(100), unique=True, nullable=False)
+	placeName = db.Column(db.String(100), unique=True, nullable=False)
+	image = db.Column(db.String(100), nullable=False)
+	description = db.Column(db.String(100), unique=True, nullable=False)
+	features = db.Column(db.String(100), unique=True, nullable=False)
